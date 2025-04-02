@@ -12,7 +12,8 @@ export interface MenuItem {
 export interface MenuCategory {
   id: string;
   name: string;
-  items: MenuItem[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface City {

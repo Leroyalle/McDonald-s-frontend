@@ -1,10 +1,6 @@
 'use client';
-import { AppPromo } from './app-promo';
-import { CitySelection } from './city-selection';
-import { MenuSection } from './menu-section';
 
-import { Notice } from './notice';
-import { WelcomeSection } from './welcome-section';
+import { AppPromo, CitySelection, MenuSection, Notice, WelcomeSection } from './components';
 
 export const HomeWrapper = () => {
   return (

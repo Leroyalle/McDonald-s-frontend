@@ -1,14 +1,15 @@
 import { allSettled, Effect, fork, serialize } from 'effector';
 
-type FetchOptions<P, R, E> = {
+type FetchOptions<P = unknown, R = unknown, E = Error> = {
   effect: Effect<P, R, E>;
   params?: P;
 };
 
 export async function fetchAndSerialize<P, R, E>(options: FetchOptions<P, R, E>) {
-  const { effect, params } = options;
   const scope = fork();
+
+  const { effect, params } = options;
   await allSettled(effect, { scope, params });
-  const values = serialize(scope);
-  return values;
+
+  return serialize(scope);
 }
