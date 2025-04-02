@@ -1,11 +1,13 @@
 import Image from 'next/image';
-import { MenuItem } from '@/types/menu';
+import { Product } from '@/shared/types';
 
 interface ProductItemProps {
-  item: MenuItem;
+  item: Product;
 }
 
 export const ProductItem = ({ item }: ProductItemProps) => {
+  const firstItem = item.items[0];
+
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm">
       <div className="relative">
@@ -14,14 +16,14 @@ export const ProductItem = ({ item }: ProductItemProps) => {
             НОВИНКА
           </div>
         )}
-        {item.bonusMultiplier && (
+        {item.bonusMultiplier > 1 && (
           <div className="absolute top-2 right-2 bg-orange-500 text-white rounded-full p-2">
             <div className="text-xs font-bold">x{item.bonusMultiplier}</div>
             <div className="text-[10px]">БОНУСОВ</div>
           </div>
         )}
         <Image
-          src={item.image}
+          src={firstItem.image}
           alt={item.name}
           width={300}
           height={200}
@@ -30,8 +32,8 @@ export const ProductItem = ({ item }: ProductItemProps) => {
       </div>
       <div className="p-4">
         <h3 className="font-medium mb-4">{item.name}</h3>
-        <div className="text-sm text-gray-500">{item.weight}</div>
-        <div className="font-bold mt-1">от {item.price} ₽</div>
+        <div className="text-sm text-gray-500">{firstItem.weight}</div>
+        <div className="font-bold mt-1">от {firstItem.price} ₽</div>
       </div>
     </div>
   );

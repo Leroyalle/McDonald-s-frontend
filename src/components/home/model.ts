@@ -1,11 +1,6 @@
 import { requestFx } from '@/shared/api';
 import { createEffect, createEvent, createStore, sample } from 'effector';
-
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
+import { Product } from '@/shared/types';
 
 export interface Category {
   id: number;

@@ -1,6 +1,6 @@
 import { HomeWrapper } from '@/components';
 import { productsFetchFx } from '@/components/home/model';
-import { fetchAndSerialize } from '@/shared/lib/fetch-and-serialize';
+import { fetchAndSerialize } from '@/shared/lib';
 import { EffectorNext } from '@effector/next';
 
 export default async function Home() {

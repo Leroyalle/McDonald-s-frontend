@@ -1,8 +1,8 @@
-import { MenuItem } from '@/types/menu';
+import { Product } from '@/shared/types';
 import { ProductItem } from './product-item';
 
 interface ProductListProps {
-  items: MenuItem[];
+  items: Product[];
 }
 
 export const ProductList = ({ items }: ProductListProps) => {

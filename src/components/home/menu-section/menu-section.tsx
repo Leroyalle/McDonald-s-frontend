@@ -2,11 +2,11 @@
 import { MENU_CATEGORIES } from '@/constants/menu';
 import { MenuCategories } from '.';
 import { useUnit } from 'effector-react';
-import { $category, categoryChange } from '../model';
+import { $category, $products, categoryChange } from '../model';
 import { ProductList } from './product-list';
 
 export const MenuSection = () => {
-  const [setCategory, category] = useUnit([categoryChange, $category]);
+  const [setCategory, category, products] = useUnit([categoryChange, $category, $products]);
 
   return (
     <div className="mb-8">
@@ -16,7 +16,7 @@ export const MenuSection = () => {
         selectedCategory={category}
         onSelectCategory={setCategory}
       />
-      <ProductList items={MENU_CATEGORIES[0].items} />
+      <ProductList items={products} />
     </div>
   );
 };

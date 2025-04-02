@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react';
-import { MenuCategory } from '@/types/menu';
+import { MenuCategory } from '@/shared/types/menu';
 
 interface MenuCategoriesProps {
   categories: MenuCategory[];
