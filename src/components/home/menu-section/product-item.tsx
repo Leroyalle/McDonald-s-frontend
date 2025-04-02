@@ -1,11 +1,11 @@
 import Image from 'next/image';
-import { MenuItem as MenuItemType } from '@/types/menu';
+import { MenuItem } from '@/types/menu';
 
-interface MenuItemProps {
-  item: MenuItemType;
+interface ProductItemProps {
+  item: MenuItem;
 }
 
-export const MenuItem = ({ item }: MenuItemProps) => {
+export const ProductItem = ({ item }: ProductItemProps) => {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm">
       <div className="relative">

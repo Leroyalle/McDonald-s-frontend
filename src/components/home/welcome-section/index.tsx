@@ -5,7 +5,7 @@ export const WelcomeSection = () => {
     <div className="flex items-center mb-8">
       <div className="bg-green-100 rounded-full p-2 mr-3">
         <Image
-          src="/placeholder.svg?height=40&width=40"
+          src="https://s.rbk.ru/v1_companies_s3/media/trademarks/b76f788e-af91-4140-a129-1a92c8c35e98.jpg"
           alt="Icon"
           width={40}
           height={40}

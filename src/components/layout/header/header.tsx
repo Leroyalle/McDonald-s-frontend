@@ -12,7 +12,7 @@ export const Header = () => {
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center">
               <Image
-                src="/placeholder.svg?height=40&width=40"
+                src="https://s.rbk.ru/v1_companies_s3/media/trademarks/b76f788e-af91-4140-a129-1a92c8c35e98.jpg"
                 alt="Logo"
                 width={40}
                 height={40}
