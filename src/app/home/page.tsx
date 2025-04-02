@@ -1,14 +1,14 @@
 import { HomeWrapper } from '@/components';
-import { productsFetch } from '@/components/home/model';
+import { productsFetchFx } from '@/components/home/model';
+import { fetchAndSerialize } from '@/shared/lib/fetch-and-serialize';
 import { EffectorNext } from '@effector/next';
-import { fork, allSettled, serialize } from 'effector';
 
 export default async function Home() {
-  const scope = fork();
-  await allSettled(productsFetch, {
-    scope,
+  const values = await fetchAndSerialize({
+    effect: productsFetchFx,
+    params: { category: 'new' },
   });
-  const values = serialize(scope);
+
   return (
     <EffectorNext values={values}>
       <main className="container mx-auto px-4 py-6">

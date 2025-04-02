@@ -22,11 +22,11 @@ export const productsFetchFx = createEffect(async (params: { category: string })
   });
 });
 
-export const productsFetch = createEvent();
+export const productsFetch = createEvent<{ category: string }>();
 export const categoryChange = createEvent<string>();
 
 export const $products = createStore<Product[]>([], { sid: 'products' });
-export const $category = createStore<string>('');
+export const $category = createStore<string>('new');
 
 $category.on(categoryChange, (_, category) => category);
 
