@@ -11,7 +11,8 @@ export interface Product {
 
 export interface ProductItem {
   id: string;
-  weight: string;
+  size: ProductSize;
+  weight: number;
   image: string;
   price: number;
   quantity: number;
@@ -20,3 +21,15 @@ export interface ProductItem {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export enum ProductSize {
+  SMALL = 'SMALL',
+  MEDIUM = 'MEDIUM',
+  LARGE = 'LARGE',
+}
+
+export const productSizes = {
+  [ProductSize.SMALL]: 'Маленький',
+  [ProductSize.MEDIUM]: 'Средний',
+  [ProductSize.LARGE]: 'Большой',
+};

@@ -7,7 +7,7 @@ export default async function Home({ searchParams }: { searchParams: { category?
   const params = await searchParams;
   const productValues = await fetchAndSerialize({
     effect: productsFetchFx,
-    params: { category: params.category || 'new' },
+    params: { category: params.category || '' },
   });
 
   const categoryValues = await fetchAndSerialize({
@@ -17,7 +17,7 @@ export default async function Home({ searchParams }: { searchParams: { category?
   const values = {
     ...productValues,
     ...categoryValues,
-    category: params.category || 'new',
+    category: params.category || '',
   };
 
   return (

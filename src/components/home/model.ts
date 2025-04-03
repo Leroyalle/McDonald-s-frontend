@@ -30,7 +30,7 @@ export const productsFetch = createEvent<{ category: string }>();
 
 export const $products = createStore<Product[]>([], { sid: 'products' });
 export const $categories = createStore<MenuCategory[]>([], { sid: 'categories' });
-export const $category = createStore<string>('new', { sid: 'category' });
+export const $category = createStore<string>('', { sid: 'category' });
 
 $category.on(categoryChange, (_, category) => category);
 $categories.on(categoriesFetchFx.doneData, (_, categories) => categories);

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Product } from '@/shared/types';
+import Link from 'next/link';
 
 interface ProductItemProps {
   item: Product;
@@ -9,7 +10,7 @@ export const ProductItem = ({ item }: ProductItemProps) => {
   const firstItem = item.items[0];
 
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm">
+    <Link href={`/product/${item.id}`} className="bg-white rounded-lg overflow-hidden shadow-sm">
       <div className="relative">
         {item.isNew && (
           <div className="absolute top-2 left-2 bg-pink-500 text-white text-xs font-bold px-2 py-1 rounded">
@@ -35,6 +36,6 @@ export const ProductItem = ({ item }: ProductItemProps) => {
         <div className="text-sm text-gray-500">{firstItem.weight}</div>
         <div className="font-bold mt-1">от {firstItem.price} ₽</div>
       </div>
-    </div>
+    </Link>
   );
 };
