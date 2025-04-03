@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { MapPin, Search } from 'lucide-react';
 import { Navigation } from './navigation';
 import { CitySelector } from './city-selector';
+import { ProfileButton } from './profile-button';
 
 export const Header = () => {
   return (
@@ -32,7 +33,10 @@ export const Header = () => {
             </div>
           </div>
 
-          <CitySelector />
+          <div className="flex items-center space-x-4">
+            <CitySelector />
+            <ProfileButton />
+          </div>
         </div>
 
         <Navigation />

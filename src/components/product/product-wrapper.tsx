@@ -10,7 +10,7 @@ import {
   SizeSelector,
 } from './components';
 import { useUnit } from 'effector-react';
-import { $product } from './model';
+import { $addToCartLoading, $product, addToCart } from './model';
 
 interface Props {
   className?: string;
@@ -64,13 +64,16 @@ const mocksProduct = {
 };
 
 export const ProductWrapper: FC<Props> = () => {
-  const [product] = useUnit([$product]);
+  const [product, onAddToCart, addToCartLoading] = useUnit([
+    $product,
+    addToCart,
+    $addToCartLoading,
+  ]);
 
   if (!product) {
     return null;
   }
 
-  console.log(product);
   return (
     <>
       <BackToMenu />
@@ -85,8 +88,11 @@ export const ProductWrapper: FC<Props> = () => {
 
             <SizeSelector items={product.items} />
 
-            <button className="w-full bg-orange-500 text-white rounded-full py-3 font-medium hover:bg-orange-600 transition-colors">
-              Добавить в корзину
+            <button
+              disabled={addToCartLoading}
+              onClick={onAddToCart}
+              className="w-full bg-orange-500 text-white rounded-full py-3 font-medium hover:bg-orange-600 transition-colors">
+              {addToCartLoading ? 'Добавляем в корзину...' : 'Добавить в корзину'}
             </button>
           </div>
         </div>
