@@ -18,9 +18,9 @@ export const instance = ky.create({
   hooks: {
     beforeRequest: [
       async (req) => {
-        const cookie = await getCookie('token');
-        if (cookie) {
-          req.headers.set('Authorization', `Bearer ${cookie}`);
+        const token = await getCookie('token');
+        if (token) {
+          req.headers.set('Authorization', `Bearer ${token.value}`);
         }
       },
     ],
