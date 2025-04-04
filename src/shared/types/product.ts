@@ -15,7 +15,6 @@ export interface ProductItem {
   weight: number;
   image: string;
   price: number;
-  quantity: number;
   productId: string;
   product: Product;
   createdAt: Date;
@@ -32,4 +31,11 @@ export const productSizes = {
   [ProductSize.SMALL]: 'Маленький',
   [ProductSize.MEDIUM]: 'Средний',
   [ProductSize.LARGE]: 'Большой',
+} as const;
+
+export type ProductItemWithProduct = ProductItem & { product: Product } & CartPayload;
+
+export type CartPayload = {
+  quantity: number;
+  isAddToCart: boolean;
 };

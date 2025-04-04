@@ -3,13 +3,28 @@ import { ProductWrapper } from '@/components';
 import { fetchAndSerialize } from '@/shared/lib';
 import { productFetchFx } from '@/components/product/model';
 
-export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
+export default async function ProductPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ itemId: string }>;
+}) {
+  const productId = (await params).id;
+  const itemId = (await searchParams).itemId;
 
   const product = await fetchAndSerialize({
     effect: productFetchFx,
-    params: id,
+    params: {
+      productId,
+      itemId,
+    },
   });
+
+  // const selectedSize = await fetchAndSerialize({
+  //   effect: productFetchFx,
+  //   params: itemId,
+  // });
 
   return (
     <EffectorNext values={product}>

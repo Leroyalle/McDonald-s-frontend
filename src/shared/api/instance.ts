@@ -28,10 +28,14 @@ export const instance = ky.create({
 });
 
 export const requestFx = createEffect<Request, unknown, Error>(async (params) => {
+  const filteredParams = params.params
+    ? Object.fromEntries(Object.entries(params.params).filter(([, v]) => v !== undefined))
+    : undefined;
+
   const response = await instance(params.path, {
     method: params.method,
     json: params.data,
-    searchParams: params.params,
+    searchParams: filteredParams,
   });
 
   if (!response.ok) {

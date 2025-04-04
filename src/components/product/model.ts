@@ -1,35 +1,29 @@
 import { requestFx } from '@/shared/api';
-import { Product } from '@/shared/types';
+import { addToCart, addToCartFx, removeFromCart, removeFromCartFx } from '@/shared/models/cart';
+import { ProductItemWithProduct } from '@/shared/types';
 import { createEffect, createEvent, createStore, sample } from 'effector';
 
 export const productFetchFx = createEffect(
-  async (id: string) =>
-    requestFx({
-      method: 'GET',
-      path: `product/${id}`,
-    }) as Promise<Product>,
-);
-
-export const addToCartFx = createEffect(
   async ({ productId, itemId }: { productId: string; itemId: string }) => {
-    requestFx({
-      method: 'POST',
-      path: `cart`,
-      data: { productId, itemId },
-    });
+    return (await requestFx({
+      method: 'GET',
+      path: `product-item/${productId}`,
+      params: { itemId },
+    })) as Promise<ProductItemWithProduct>;
   },
 );
 
 export const sizeChange = createEvent<string>();
-export const addToCart = createEvent();
 
-export const $product = createStore<Product | null>(null, { sid: 'product' });
+export const $productItem = createStore<ProductItemWithProduct | null>(null, { sid: 'product' });
+export const $productItemLoading = createStore<boolean>(false, { sid: 'productLoading' });
 export const $selectedSize = createStore<string>('', { sid: 'selectedSize' });
-export const $addToCartLoading = createStore<boolean>(false);
+
+$productItemLoading.on(productFetchFx, () => true).on(productFetchFx.finally, () => false);
 
 sample({
   clock: productFetchFx.doneData,
-  fn: (product) => product.items[0]?.id ?? '',
+  fn: (product) => product.id,
   target: $selectedSize,
 });
 
@@ -40,34 +34,49 @@ sample({
 
 sample({
   clock: productFetchFx.doneData,
-  target: $product,
+  target: $productItem,
 });
 
 sample({
   clock: addToCart,
-  source: { product: $product, itemId: $selectedSize },
-  filter: ({ product, itemId }) => !!product?.id && !!itemId,
-  fn: ({ product, itemId }) => ({
-    productId: product?.id ?? '',
+  source: { productItem: $productItem, itemId: $selectedSize },
+  filter: ({ productItem, itemId }) => !!productItem?.product.id && !!itemId,
+  fn: ({ productItem, itemId }) => ({
+    productId: productItem?.product.id ?? '',
     itemId,
   }),
   target: addToCartFx,
 });
 
 sample({
-  clock: addToCartFx.pending,
-  fn: () => {
-    console.log('pending');
-    return true;
-  },
-  target: $addToCartLoading,
+  clock: removeFromCart,
+  source: { itemId: $selectedSize },
+  filter: ({ itemId }) => !!itemId,
+  fn: ({ itemId }) => ({
+    itemId,
+  }),
+  target: removeFromCartFx,
 });
 
 sample({
-  clock: addToCartFx.doneData,
-  fn: () => {
-    console.log('doneData');
-    return false;
+  clock: $selectedSize.updates,
+  source: { productItem: $productItem, selectedSize: $selectedSize },
+  fn: ({ productItem, selectedSize }) => {
+    return {
+      productId: productItem?.product.id ?? '',
+      itemId: selectedSize,
+    };
   },
-  target: $addToCartLoading,
+  target: productFetchFx,
+});
+
+sample({
+  clock: [addToCartFx.doneData, removeFromCartFx.doneData],
+  source: { productItem: $productItem, selectedSize: $selectedSize },
+  filter: ({ productItem, selectedSize }) => !!productItem?.product.id && !!selectedSize,
+  fn: ({ productItem, selectedSize }) => ({
+    productId: productItem?.product.id ?? '',
+    itemId: selectedSize,
+  }),
+  target: productFetchFx,
 });

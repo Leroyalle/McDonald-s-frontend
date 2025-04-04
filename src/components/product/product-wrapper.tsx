@@ -1,6 +1,7 @@
 'use client';
 import { FC } from 'react';
 import {
+  AddToCartButton,
   Allergens,
   BackToMenu,
   Ingredients,
@@ -10,7 +11,7 @@ import {
   SizeSelector,
 } from './components';
 import { useUnit } from 'effector-react';
-import { $addToCartLoading, $product, addToCart } from './model';
+import { $productItem } from './model';
 
 interface Props {
   className?: string;
@@ -64,11 +65,7 @@ const mocksProduct = {
 };
 
 export const ProductWrapper: FC<Props> = () => {
-  const [product, onAddToCart, addToCartLoading] = useUnit([
-    $product,
-    addToCart,
-    $addToCartLoading,
-  ]);
+  const [product] = useUnit([$productItem]);
 
   if (!product) {
     return null;
@@ -80,23 +77,14 @@ export const ProductWrapper: FC<Props> = () => {
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         <div className="md:flex">
-          <ProductImage src={product?.items[0].image} alt={product?.name} isNew />
-
+          <ProductImage src={product.image} alt={product.product.name} isNew />
           <div className="md:w-1/2 p-6">
-            <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-            <p className="text-gray-600 mb-6">{product.description}</p>
-
-            <SizeSelector items={product.items} />
-
-            <button
-              disabled={addToCartLoading}
-              onClick={onAddToCart}
-              className="w-full bg-orange-500 text-white rounded-full py-3 font-medium hover:bg-orange-600 transition-colors">
-              {addToCartLoading ? 'Добавляем в корзину...' : 'Добавить в корзину'}
-            </button>
+            <h1 className="text-2xl font-bold mb-2">{product.product.name}</h1>
+            <p className="text-gray-600 mb-6">{product.product.description}</p>
+            <SizeSelector items={product.product.items} />
+            <AddToCartButton />
           </div>
         </div>
-
         <NutritionInfo
           nutrition={{
             proteins: '10.5 г',
@@ -105,12 +93,9 @@ export const ProductWrapper: FC<Props> = () => {
             calories: '280 ккал',
           }}
         />
-
         <Ingredients />
-
         <Allergens allergens={mocksProduct.allergens} />
       </div>
-
       <RelatedProducts products={mocksProduct.relatedProducts} />
     </>
   );
