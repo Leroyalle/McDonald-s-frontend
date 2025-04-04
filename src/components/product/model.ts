@@ -1,5 +1,12 @@
 import { requestFx } from '@/shared/api';
-import { addToCart, addToCartFx, removeFromCart, removeFromCartFx } from '@/shared/models/cart';
+import {
+  addToCart,
+  addToCartFx,
+  removeFromCart,
+  removeFromCartFx,
+  updateQuantity,
+  updateQuantityFx,
+} from '@/shared/models/cart';
 import { ProductItemWithProduct } from '@/shared/types';
 import { createEffect, createEvent, createStore, sample } from 'effector';
 
@@ -59,6 +66,17 @@ sample({
 });
 
 sample({
+  clock: updateQuantity,
+  source: { itemId: $selectedSize, quantity: $productItem.map((item) => item?.quantity ?? 1) },
+  filter: ({ itemId }) => !!itemId,
+  fn: ({ itemId, quantity }, type) => ({
+    itemId,
+    quantity: type === 'increment' ? quantity + 1 : quantity - 1,
+  }),
+  target: updateQuantityFx,
+});
+
+sample({
   clock: $selectedSize.updates,
   source: { productItem: $productItem, selectedSize: $selectedSize },
   fn: ({ productItem, selectedSize }) => {
@@ -71,7 +89,7 @@ sample({
 });
 
 sample({
-  clock: [addToCartFx.doneData, removeFromCartFx.doneData],
+  clock: [addToCartFx.doneData, removeFromCartFx.doneData, updateQuantityFx.doneData],
   source: { productItem: $productItem, selectedSize: $selectedSize },
   filter: ({ productItem, selectedSize }) => !!productItem?.product.id && !!selectedSize,
   fn: ({ productItem, selectedSize }) => ({

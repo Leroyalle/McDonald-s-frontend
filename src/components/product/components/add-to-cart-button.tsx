@@ -5,8 +5,10 @@ import { useUnit } from 'effector-react';
 import {
   $addToCartLoading,
   $removeFromCartLoading,
+  $updateQuantityLoading,
   addToCart,
   removeFromCart,
+  updateQuantity,
 } from '@/shared/models/cart';
 
 interface Props {
@@ -15,11 +17,20 @@ interface Props {
 
 export const AddToCartButton: React.FC<Props> = ({ className }) => {
   const [productItem, productItemLoading] = useUnit([$productItem, $productItemLoading]);
-  const [onAddToCart, addToCartLoading, onRemoveFromCart, removeFromCartLoading] = useUnit([
+  const [
+    onAddToCart,
+    addToCartLoading,
+    onRemoveFromCart,
+    removeFromCartLoading,
+    onUpdateQuantity,
+    updateQuantityLoading,
+  ] = useUnit([
     addToCart,
     $addToCartLoading,
     removeFromCart,
     $removeFromCartLoading,
+    updateQuantity,
+    $updateQuantityLoading,
   ]);
 
   console.log(productItem);
@@ -28,12 +39,21 @@ export const AddToCartButton: React.FC<Props> = ({ className }) => {
     return (
       <div className="flex items-center gap-x-4">
         <div className="flex items-center gap-x-1">
-          <Button>-</Button>
+          <Button
+            onClick={() => onUpdateQuantity('decrement')}
+            disabled={productItem.quantity <= 1 || updateQuantityLoading || productItemLoading}>
+            -
+          </Button>
           <span>{productItem.quantity}</span>
-          <Button>+</Button>
+          <Button
+            onClick={() => onUpdateQuantity('increment')}
+            disabled={updateQuantityLoading || productItemLoading}>
+            +
+          </Button>
         </div>
         <Button
-          loading={removeFromCartLoading || productItemLoading}
+          loading={removeFromCartLoading}
+          disabled={productItemLoading}
           onClick={onRemoveFromCart}
           variant="solid"
           block
@@ -48,7 +68,8 @@ export const AddToCartButton: React.FC<Props> = ({ className }) => {
 
   return (
     <Button
-      loading={addToCartLoading || productItemLoading}
+      loading={addToCartLoading}
+      disabled={productItemLoading}
       onClick={onAddToCart}
       variant="solid"
       block

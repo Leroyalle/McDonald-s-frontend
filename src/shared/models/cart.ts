@@ -19,11 +19,24 @@ export const removeFromCartFx = createEffect(async ({ itemId }: { itemId: string
   });
 });
 
+export const updateQuantityFx = createEffect(
+  async ({ itemId, quantity }: { itemId: string; quantity: number }) => {
+    return await requestFx({
+      method: 'PATCH',
+      path: `cart/quantity`,
+      data: { productItemId: itemId, quantity },
+    });
+  },
+);
+
 export const addToCart = createEvent();
 export const removeFromCart = createEvent();
+export const updateQuantity = createEvent<'increment' | 'decrement'>();
 
 export const $addToCartLoading = createStore<boolean>(false);
 export const $removeFromCartLoading = createStore<boolean>(false);
+export const $updateQuantityLoading = createStore<boolean>(false);
 
 $addToCartLoading.on(addToCartFx, () => true).on(addToCartFx.finally, () => false);
 $removeFromCartLoading.on(removeFromCartFx, () => true).on(removeFromCartFx.finally, () => false);
+$updateQuantityLoading.on(updateQuantityFx, () => true).on(updateQuantityFx.finally, () => false);
