@@ -7,11 +7,9 @@ export const useCheckPayment = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [api, contextHolder] = notification.useNotification();
-  console.log(searchParams);
 
   useEffect(() => {
     if (searchParams.has('paid')) {
-      console.log(searchParams);
       api.success({
         message: 'Заказ успешно оплачен!',
       });

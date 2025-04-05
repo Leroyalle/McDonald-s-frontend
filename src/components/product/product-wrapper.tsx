@@ -67,6 +67,8 @@ const mocksProduct = {
 export const ProductWrapper: FC<Props> = () => {
   const [product] = useUnit([$productItem]);
 
+  console.log('product', product);
+
   if (!product) {
     return null;
   }

@@ -21,11 +21,6 @@ export default async function ProductPage({
     },
   });
 
-  // const selectedSize = await fetchAndSerialize({
-  //   effect: productFetchFx,
-  //   params: itemId,
-  // });
-
   return (
     <EffectorNext values={product}>
       <main className="container mx-auto px-4 py-6">

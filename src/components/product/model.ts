@@ -5,11 +5,13 @@ import { createEffect, createEvent, createStore, sample } from 'effector';
 
 export const productFetchFx = createEffect(
   async ({ productId, itemId }: { productId: string; itemId: string }) => {
-    return (await requestFx({
+    const product = (await requestFx({
       method: 'GET',
       path: `product-item/${productId}`,
       params: { itemId },
     })) as Promise<ProductItemWithRelations>;
+    console.log('productFetchFx', product);
+    return product;
   },
 );
 
