@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import { Product } from '@/shared/types';
+import { ProductWithItemsWithProduct } from '@/shared/types';
 import Link from 'next/link';
 
 interface ProductItemProps {
-  item: Product;
+  item: ProductWithItemsWithProduct;
 }
 
 export const ProductItem = ({ item }: ProductItemProps) => {

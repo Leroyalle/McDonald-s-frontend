@@ -1,4 +1,4 @@
-import { createEffect, createEvent, createStore } from 'effector';
+import { createEffect, createEvent, createStore, sample } from 'effector';
 import { requestFx } from '../api';
 
 export const addToCartFx = createEffect(
@@ -29,14 +29,48 @@ export const updateQuantityFx = createEffect(
   },
 );
 
-export const addToCart = createEvent();
-export const removeFromCart = createEvent();
-export const updateQuantity = createEvent<'increment' | 'decrement'>();
+export const addToCart = createEvent<{ productId: string; itemId: string }>();
+export const removeFromCart = createEvent<{ itemId: string }>();
+export const updateQuantity = createEvent<{ itemId: string; quantity: number }>();
 
 export const $addToCartLoading = createStore<boolean>(false);
-export const $removeFromCartLoading = createStore<boolean>(false);
+export const $removeFromCartLoadingMap = createStore<Record<string, boolean>>({});
 export const $updateQuantityLoading = createStore<boolean>(false);
+export const $updateQuantityLoadingMap = createStore<Record<string, boolean>>({});
 
 $addToCartLoading.on(addToCartFx, () => true).on(addToCartFx.finally, () => false);
-$removeFromCartLoading.on(removeFromCartFx, () => true).on(removeFromCartFx.finally, () => false);
+$removeFromCartLoadingMap
+  .on(removeFromCartFx, (state, { itemId }) => ({
+    ...state,
+    [itemId]: true,
+  }))
+  .on(removeFromCartFx.finally, (state, { params }) => ({
+    ...state,
+    [params.itemId]: false,
+  }));
+$updateQuantityLoadingMap
+  .on(updateQuantityFx, (state, { itemId }) => ({
+    ...state,
+    [itemId]: true,
+  }))
+  .on(updateQuantityFx.finally, (state, { params }) => ({
+    ...state,
+    [params.itemId]: false,
+  }));
+
 $updateQuantityLoading.on(updateQuantityFx, () => true).on(updateQuantityFx.finally, () => false);
+
+sample({
+  clock: addToCart,
+  target: addToCartFx,
+});
+
+sample({
+  clock: removeFromCart,
+  target: removeFromCartFx,
+});
+
+sample({
+  clock: updateQuantity,
+  target: updateQuantityFx,
+});

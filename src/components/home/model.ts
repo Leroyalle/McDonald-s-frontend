@@ -1,6 +1,6 @@
 import { requestFx } from '@/shared/api';
 import { createEffect, createEvent, createStore, sample } from 'effector';
-import { MenuCategory, Product } from '@/shared/types';
+import { MenuCategory, ProductWithItemsWithProduct } from '@/shared/types';
 
 export interface Category {
   id: number;
@@ -14,7 +14,7 @@ export const productsFetchFx = createEffect(async (params: { category: string })
     params: {
       category: params.category,
     },
-  }) as Promise<Product[]>;
+  }) as Promise<ProductWithItemsWithProduct[]>;
 });
 
 export const categoriesFetchFx = createEffect(async () => {
@@ -28,7 +28,7 @@ export const categoryChange = createEvent<string>();
 
 export const productsFetch = createEvent<{ category: string }>();
 
-export const $products = createStore<Product[]>([], { sid: 'products' });
+export const $products = createStore<ProductWithItemsWithProduct[]>([], { sid: 'products' });
 export const $categories = createStore<MenuCategory[]>([], { sid: 'categories' });
 export const $category = createStore<string>('', { sid: 'category' });
 
@@ -43,6 +43,6 @@ sample({
 
 sample({
   clock: productsFetchFx.doneData,
-  fn: (data) => data as Product[],
+  fn: (data) => data as ProductWithItemsWithProduct[],
   target: $products,
 });

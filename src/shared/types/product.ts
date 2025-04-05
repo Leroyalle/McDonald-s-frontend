@@ -1,25 +1,35 @@
-export interface Product {
+export type ProductWithItemsWithProduct = Product & {
+  items: ProductItemWithProductWithItems[];
+};
+
+export type ProductItemWithProductWithItems = ProductItem & {
+  product: ProductWithItemsWithProduct;
+};
+
+export type ProductItemWithProduct = ProductItem & {
+  product: Product;
+};
+
+export type Product = {
   id: string;
   name: string;
   description: string;
   isNew: boolean;
   bonusMultiplier: number;
-  items: ProductItem[];
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
-export interface ProductItem {
+export type ProductItem = {
   id: string;
   size: ProductSize;
   weight: number;
   image: string;
   price: number;
   productId: string;
-  product: Product;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 export enum ProductSize {
   SMALL = 'SMALL',
@@ -33,7 +43,7 @@ export const productSizes = {
   [ProductSize.LARGE]: 'Большой',
 } as const;
 
-export type ProductItemWithProduct = ProductItem & { product: Product } & CartPayload;
+export type ProductItemWithRelations = ProductItemWithProductWithItems & CartPayload;
 
 export type CartPayload = {
   quantity: number;

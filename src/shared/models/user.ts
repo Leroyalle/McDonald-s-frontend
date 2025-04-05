@@ -12,7 +12,7 @@ export const userGetFx = createEffect(async () => {
 export const userGet = createEvent();
 
 export const $user = createStore<User | null>(null);
-export const $userPending = createStore<boolean>(false);
+export const $userPending = createStore<boolean>(true);
 export const $userError = createStore<boolean>(false);
 
 $userPending.on(userGetFx, () => true).on(userGetFx.finally, () => false);

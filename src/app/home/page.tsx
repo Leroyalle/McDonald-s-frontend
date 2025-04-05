@@ -3,8 +3,15 @@ import { productsFetchFx, categoriesFetchFx } from '@/components/home/model';
 import { fetchAndSerialize } from '@/shared/lib';
 import { EffectorNext } from '@effector/next';
 
-export default async function Home({ searchParams }: { searchParams: { category?: string } }) {
+export const revalidate = 3600;
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
   const params = await searchParams;
+
   const productValues = await fetchAndSerialize({
     effect: productsFetchFx,
     params: { category: params.category || '' },

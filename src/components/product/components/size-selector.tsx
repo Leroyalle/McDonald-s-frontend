@@ -1,12 +1,12 @@
 'use client';
 
-import { ProductItem, productSizes } from '@/shared/types';
+import { ProductItemWithProductWithItems, productSizes } from '@/shared/types';
 import { useUnit } from 'effector-react';
 import { $productItem, $productItemLoading, $selectedSize, sizeChange } from '../model';
 import Link from 'next/link';
 
 interface SizeSelectorProps {
-  items: ProductItem[];
+  items: ProductItemWithProductWithItems[];
 }
 
 export const SizeSelector = ({ items }: SizeSelectorProps) => {

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Search } from 'lucide-react';
+import { MapPin, Search, ShoppingBag } from 'lucide-react';
 import { Navigation } from './navigation';
 import { CitySelector } from './city-selector';
 import { ProfileButton } from './profile-button';
@@ -34,6 +34,12 @@ export const Header = () => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <Link
+              href="/cart"
+              className="flex items-center text-gray-700 hover:text-green-800 transition-colors">
+              <ShoppingBag className="h-5 w-5" />
+              <span className="ml-1 hidden sm:inline">Корзина</span>
+            </Link>
             <CitySelector />
             <ProfileButton />
           </div>

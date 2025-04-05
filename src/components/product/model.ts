@@ -1,13 +1,6 @@
 import { requestFx } from '@/shared/api';
-import {
-  addToCart,
-  addToCartFx,
-  removeFromCart,
-  removeFromCartFx,
-  updateQuantity,
-  updateQuantityFx,
-} from '@/shared/models/cart';
-import { ProductItemWithProduct } from '@/shared/types';
+import { addToCartFx, removeFromCartFx, updateQuantityFx } from '@/shared/models/cart';
+import { ProductItemWithRelations } from '@/shared/types';
 import { createEffect, createEvent, createStore, sample } from 'effector';
 
 export const productFetchFx = createEffect(
@@ -16,13 +9,13 @@ export const productFetchFx = createEffect(
       method: 'GET',
       path: `product-item/${productId}`,
       params: { itemId },
-    })) as Promise<ProductItemWithProduct>;
+    })) as Promise<ProductItemWithRelations>;
   },
 );
 
 export const sizeChange = createEvent<string>();
 
-export const $productItem = createStore<ProductItemWithProduct | null>(null, { sid: 'product' });
+export const $productItem = createStore<ProductItemWithRelations | null>(null, { sid: 'product' });
 export const $productItemLoading = createStore<boolean>(false, { sid: 'productLoading' });
 export const $selectedSize = createStore<string>('', { sid: 'selectedSize' });
 
@@ -42,38 +35,6 @@ sample({
 sample({
   clock: productFetchFx.doneData,
   target: $productItem,
-});
-
-sample({
-  clock: addToCart,
-  source: { productItem: $productItem, itemId: $selectedSize },
-  filter: ({ productItem, itemId }) => !!productItem?.product.id && !!itemId,
-  fn: ({ productItem, itemId }) => ({
-    productId: productItem?.product.id ?? '',
-    itemId,
-  }),
-  target: addToCartFx,
-});
-
-sample({
-  clock: removeFromCart,
-  source: { itemId: $selectedSize },
-  filter: ({ itemId }) => !!itemId,
-  fn: ({ itemId }) => ({
-    itemId,
-  }),
-  target: removeFromCartFx,
-});
-
-sample({
-  clock: updateQuantity,
-  source: { itemId: $selectedSize, quantity: $productItem.map((item) => item?.quantity ?? 1) },
-  filter: ({ itemId }) => !!itemId,
-  fn: ({ itemId, quantity }, type) => ({
-    itemId,
-    quantity: type === 'increment' ? quantity + 1 : quantity - 1,
-  }),
-  target: updateQuantityFx,
 });
 
 sample({
